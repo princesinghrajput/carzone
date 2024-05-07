@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime
+from ckeditor.fields import RichTextField
+from multiselectfield import MultiSelectField  # Adjusted import
 # Create your models here.
 
 class Car(models.Model):
@@ -40,7 +42,7 @@ class Car(models.Model):
         ('UP', 'Uttar Pradesh'),
         ('UK', 'Uttarakhand'),
         ('WB', 'West Bengal'),
-)
+    )
 
     year_choices = [(r, r) for r in range(2000, datetime.now().year + 1)]
 
@@ -75,13 +77,13 @@ class Car(models.Model):
     year = models.IntegerField(choices=year_choices)
     condition = models.CharField(max_length=100)
     price = models.IntegerField()
-    description =models.TextField(max_length=300)
+    description = RichTextField()
     car_photo = models.ImageField(upload_to='photos/%Y/%m/%d/')
     car_photo_1 = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
     car_photo_2 = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
     car_photo_3 = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
     car_photo_4 = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
-    features = models.CharField(max_length=100, choices=features_choices, blank=True, null=True)
+    features = models.CharField(choices=features_choices)  # Corrected usage
     body_style = models.CharField(max_length=100)
     engine = models.CharField(max_length=100)
     transmission = models.CharField(max_length=100)
@@ -95,3 +97,7 @@ class Car(models.Model):
     no_of_owners = models.CharField(max_length=100)
     is_featured = models.BooleanField(default=False)
     created_date = models.DateTimeField(default=datetime.now, blank=True)
+
+
+    def __str__(self):
+        return self.car_title
